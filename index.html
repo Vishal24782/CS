@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -166,8 +167,6 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--ink);min-
 .snap-sec{position:relative}
 .snap-sec h4{display:flex;align-items:center;gap:.55rem;color:#163927}
 .snap-sec h4::before{content:"";display:inline-block;width:8px;height:22px;border-radius:6px;background:var(--g2)}
-.source-pill{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:5px 9px;margin-top:.7rem;background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.22)}
-.source-pill.local{background:#fdf8e8;color:#7a5c00;border-color:#eadba5}
 .premium-callout{background:#f7faf8;border:1px solid #dfe8e2;border-radius:10px;padding:1rem 1.1rem;margin:.9rem 0}
 .premium-callout p{font-size:13px;color:var(--ink2);line-height:1.6}
 .snap-doc .slist li{margin-bottom:.45rem}
@@ -269,7 +268,12 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--ink);min-
 @media(max-width:600px){.fg,.fg3{grid-template-columns:1fr}.rg{grid-template-columns:1fr}.otlk-grid{grid-template-columns:1fr}}
 @media print{
   .nav,.btn-row,.email-box,.paste-box,.rev-hd,.gen-loading{display:none!important}
+  .ai-status,.edit-note{display:none!important}
   body{background:#fff}
+  body.print-snap .sc{display:none!important}
+  body.print-snap #sc-reveal{display:block!important}
+  body.print-snap #sc-reveal .rev-wrap{max-width:none;margin:0;padding:0}
+  body.print-snap #sc-reveal .rev-wrap > *:not(#snap-doc){display:none!important}
   .snap-doc{display:block!important;border:none;border-radius:0}
   .snap-doc.editing{outline:none!important;box-shadow:none!important}
   .snap-doc *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
@@ -695,7 +699,7 @@ var CFG = {
   // Production mode: do not silently send hardwired local reports as final reports.
   requireOpenAI: true,
   // Admin/contact email used in payment fallback and email export.
-  email:      'vishal@careershield.in',
+  email:      'vishal_profn@yahoo.com',
   // Replace with Razorpay/payment link. If unchanged, the CTA opens an email request instead of showing placeholder text.
   paymentUrl: 'YOUR_RAZORPAY_LINK'
 };
@@ -1421,12 +1425,33 @@ function toSheets(r){
   if(!CFG.sheetsUrl||CFG.sheetsUrl==='YOUR_APPS_SCRIPT_URL') return;
   var payload=JSON.stringify(r);
   try{
-    if(navigator.sendBeacon){
-      var ok=navigator.sendBeacon(CFG.sheetsUrl,new Blob([payload],{type:'text/plain;charset=utf-8'}));
-      if(ok) return;
-    }
-  }catch(e){}
-  fetch(CFG.sheetsUrl,{method:'POST',mode:'no-cors',keepalive:true,headers:{'Content-Type':'text/plain;charset=utf-8'},body:payload}).catch(function(){});
+    var iframeName='cs_sheet_sink_'+Date.now();
+    var iframe=document.createElement('iframe');
+    iframe.name=iframeName;
+    iframe.style.display='none';
+    document.body.appendChild(iframe);
+
+    var form=document.createElement('form');
+    form.method='POST';
+    form.action=CFG.sheetsUrl;
+    form.target=iframeName;
+    form.style.display='none';
+
+    var input=document.createElement('input');
+    input.type='hidden';
+    input.name='payload';
+    input.value=payload;
+    form.appendChild(input);
+    document.body.appendChild(form);
+    form.submit();
+
+    setTimeout(function(){
+      if(form.parentNode) form.parentNode.removeChild(form);
+      if(iframe.parentNode) iframe.parentNode.removeChild(iframe);
+    },15000);
+  }catch(e){
+    fetch(CFG.sheetsUrl,{method:'POST',mode:'no-cors',keepalive:true,headers:{'Content-Type':'text/plain;charset=utf-8'},body:payload}).catch(function(){});
+  }
 }
 
 // ============================================================
@@ -1977,8 +2002,6 @@ function buildSnapFromAI(r,report){
   setReportEditMode(false);
   var p=r.profile, role=getRoleData(p.roleKey,p.roleSubKey), roleLabel=p.roleSubLabel||p.roleLabel||role.label;
   var sigs=r.secondarySignals||[], genDate=new Date().toLocaleDateString('en-IN');
-  var sourceLabel=r.aiSource==='openai'?'AI-enhanced report':'Internal local draft';
-  var sourceCls=r.aiSource==='openai'?'source-pill':'source-pill local';
   function list(items){return '<ul class="slist">'+items.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>';}
   function pblock(label,text){return '<p><strong>'+label+':</strong> '+esc(text)+'</p>';}
   var riskHtml=report.risks.map(function(x){return '<div class="risk-card"><h5>'+esc(x.name)+'</h5>'+pblock('What it means in daily work',x.daily)+pblock('Why it matters',x.why)+pblock('Early warning signs',x.warning)+pblock('What to do first',x.first)+'</div>';}).join('');
@@ -1993,9 +2016,9 @@ function buildSnapFromAI(r,report){
     upsellHtml='<div class="snap-sec page-break"><div class="upsell-sec"><h4>Optional Deeper Support</h4><p>This report is designed to be useful on its own. These options are only for people who want human review, accountability, or a deeper second layer.</p><div class="upsell-options"><div class="uopt"><div class="uopt-name">AI Role Audit</div><div class="uopt-desc">Review how AI pressure affects your exact role and what to reposition in 60 days.</div><div class="uopt-price">&#8377;2,999</div></div><div class="uopt"><div class="uopt-name">Career Risk Audit</div><div class="uopt-desc">A deeper review of manager risk, visibility, market readiness, and next decisions.</div><div class="uopt-price">&#8377;7,500</div></div><div class="uopt"><div class="uopt-name">Career Recovery Roadmap</div><div class="uopt-desc">Hands-on roadmap for high-risk or urgent profiles that need structured recovery.</div><div class="uopt-price">&#8377;15,000</div></div></div><p style="font-size:11px;opacity:.75;margin-top:1rem">Optional only. Start with the 90-day plan first if you can act independently.</p></div></div>';
   }
   var doc=document.getElementById('snap-doc');
-  doc.innerHTML='<div class="snap-top"><div class="se">CareerShield&#8482; - Job Risk Diagnostic for Mid-Career Professionals</div><h2 id="sn-name">'+esc(p.name||'Professional')+' - CareerShield Report</h2><div class="sm" id="sn-meta">'+esc([roleLabel,p.industry,'Generated '+genDate].filter(Boolean).join(' | '))+'</div><div class="'+sourceCls+'">'+esc(sourceLabel)+'</div></div>'
+  doc.innerHTML='<div class="snap-top"><div class="se">CareerShield&#8482; - Job Risk Diagnostic for Mid-Career Professionals</div><h2 id="sn-name">'+esc(p.name||'Professional')+' - CareerShield Report</h2><div class="sm" id="sn-meta">'+esc([roleLabel,p.industry,'Generated '+genDate].filter(Boolean).join(' | '))+'</div></div>'
     +'<div class="snap-body"><div class="snap-srow"><div class="snap-snum" id="sn-score">'+esc(r.total)+'</div><div class="snap-smeta"><div class="oo">out of 125</div><div class="rl" id="sn-rl">'+esc((r.riskCat||{}).lbl||'-')+'</div><div><span class="badge '+esc((r.riskCat||{}).cls||'b-med')+'">'+esc((r.riskCat||{}).lbl||'-')+'</span></div></div><div style="flex:1;min-width:180px"><div class="plabel">Dominant Pattern</div><div id="sn-pat" style="font-size:13px;font-weight:700;color:var(--ink)">'+esc((r.pattern||{}).name||'-')+(sigs.length?' + '+esc(sigs.join(', ')):'')+'</div><div style="font-size:12px;color:var(--ink3);margin-top:.35rem">Confidence Level: '+esc(r.confidenceLevel||'-')+'</div></div></div>'
-    +'<div class="snap-secs">'+(r.aiSource==='openai'?'':'<div class="premium-callout"><p><strong>Internal draft notice:</strong> This version was generated without OpenAI enhancement. Use it for review only, not final client delivery.</p></div>')+'<div class="snap-sec"><h4>What This Score Means</h4><p>'+esc(report.score_interpretation)+'</p></div>'
+    +'<div class="snap-secs"><div class="snap-sec"><h4>What This Score Means</h4><p>'+esc(report.score_interpretation)+'</p></div>'
     +'<div class="snap-sec"><h4>Diagnostic Confidence Level</h4><div class="confidence-box"><div class="level">'+esc(r.confidenceLevel||'-')+' confidence</div><p>'+esc(report.confidence)+'</p></div></div>'
     +'<div class="snap-sec page-break"><h4>Your Top 3 Risks</h4>'+riskHtml+'</div>'
     +'<div class="snap-sec"><h4>What Is Working In Your Favour</h4>'+list(report.strengths)+'</div>'
@@ -2049,6 +2072,7 @@ function exportCsv(){
 }
 function dlPdf(){
   if(!document.getElementById('snap-doc').classList.contains('on')){alert('Generate the report first.');return;}
+  setReportEditMode(false);
   document.body.classList.add('print-snap');
   window.print();
   document.body.classList.remove('print-snap');
@@ -2056,6 +2080,7 @@ function dlPdf(){
 function dlWord(){
   var doc=document.getElementById('snap-doc');
   if(!doc.classList.contains('on')){alert('Generate the report first.');return;}
+  setReportEditMode(false);
   var nm=document.getElementById('sn-ft-nm').textContent||'report';
   var wordHtml='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><title>CareerShield Report</title><style>body{font-family:Calibri,Arial,sans-serif;font-size:11pt;line-height:1.55;margin:2cm;color:#1a1a18}h2{font-size:18pt;color:#1a3a2a}h4{font-size:13pt;color:#1a3a2a;margin-top:16pt;border-top:1pt solid #e4e3dc;padding-top:8pt}h5{font-size:11pt;margin-bottom:4pt}p,li,div{font-size:11pt}.snap-snum{font-size:28pt;color:#1a3a2a;font-weight:bold}.badge,.btn-row,.email-box{display:none}.legal-caveat{font-size:8pt;color:#666;border-top:1pt solid #ddd;margin-top:20pt;padding-top:8pt}.page-break{page-break-before:always}</style></head><body>'+doc.innerHTML+'</body></html>';
   dlBlob(new Blob([wordHtml],{type:'application/msword'}),safe(nm)+'-careershield.doc');
@@ -2073,6 +2098,7 @@ function toggleEmailBox(){
 function sendEmail(){
   var doc=document.getElementById('snap-doc');
   if(!doc.classList.contains('on')){alert('Generate the report first.');return;}
+  setReportEditMode(false);
   var ce=document.getElementById('client-email').value.trim();
   if(!ce||!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(ce)){alert('Enter a valid client email address.');return;}
   var first=((curResult&&curResult.profile&&curResult.profile.name)||'there').split(' ')[0];

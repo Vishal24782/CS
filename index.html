@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,6 +34,33 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--ink);min-
 .prog-track{height:3px;background:var(--bdr);border-radius:2px;overflow:hidden}
 .prog-fill{height:100%;background:var(--g2);border-radius:2px;transition:width .3s ease;width:0%}
 .pbox{background:var(--card);border:1px solid var(--bdr);border-radius:12px;padding:1.75rem;margin-bottom:1.75rem}
+.assessment-shell{max-width:1060px;margin:0 auto;padding:2rem 1.5rem 5rem}
+.assessment-hero{background:linear-gradient(135deg,#10281d,#2f6a50);color:#fff;border-radius:18px;overflow:hidden;box-shadow:0 22px 60px rgba(24,33,29,.13);margin-bottom:1.65rem}
+.assessment-hero-inner{padding:2rem;display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:2rem;align-items:stretch}
+.assessment-hero .eyebrow{color:#bcd3c7;margin-bottom:.55rem}
+.assessment-hero h1{font-family:"Instrument Serif",serif;font-size:2.8rem;font-weight:400;line-height:1.05;margin-bottom:.8rem;letter-spacing:0}
+.assessment-hero h1 em{font-style:italic;color:#d9efe4}
+.assessment-hero p{font-size:14px;color:#d8e7df;line-height:1.7;max-width:630px;margin-bottom:.75rem}
+.hero-score-card{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.22);border-radius:16px;padding:1.25rem;display:flex;flex-direction:column;justify-content:space-between}
+.hero-score-card .mini-label{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:.55rem}
+.hero-score-card .bigline{font-family:"Instrument Serif",serif;font-size:2.05rem;line-height:1.05;color:#fff;margin-bottom:.5rem}
+.hero-score-card .copy{font-size:12px;color:#d8e7df;line-height:1.55}
+.hero-pills{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:1rem}
+.hero-pill{display:inline-flex;border-radius:999px;padding:6px 10px;background:#fff2d1;color:#6d4d00;font-size:10px;font-weight:800}
+.assessment-grid{display:grid;grid-template-columns:310px minmax(0,1fr);gap:1.35rem;align-items:start}
+.assessment-side{position:sticky;top:76px;background:var(--card);border:1px solid var(--bdr);border-radius:16px;padding:1.2rem;box-shadow:0 12px 34px rgba(24,33,29,.06)}
+.side-title{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--g2);margin-bottom:.75rem}
+.side-copy{font-size:13px;color:var(--ink2);line-height:1.6;margin-bottom:.95rem}
+.side-list{display:flex;flex-direction:column;gap:.65rem}
+.side-item{display:grid;grid-template-columns:28px 1fr;gap:.65rem;align-items:start}
+.side-num{width:28px;height:28px;border-radius:50%;background:var(--g3);color:var(--g);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.side-item b{display:block;font-size:12px;color:var(--ink);margin-bottom:1px}.side-item span{font-size:12px;color:var(--ink3);line-height:1.4}
+.assessment-main{min-width:0}
+.assessment-main .pbox{border-radius:16px;padding:1.65rem;box-shadow:0 12px 34px rgba(24,33,29,.05)}
+.assessment-main .qcard{border-radius:12px}
+.assessment-main .prog-wrap{background:var(--card);border:1px solid var(--bdr);border-radius:14px;padding:1rem;margin-bottom:1rem}
+.assessment-main .prog-track{height:7px}
+.assessment-main .subrow{background:var(--card);border:1px solid var(--bdr);border-radius:16px;padding:1rem 1.15rem;box-shadow:0 12px 34px rgba(24,33,29,.05)}
 .blabel{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:1.1rem}
 .fg{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
 .fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1rem}
@@ -232,7 +258,42 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--ink);min-
 .risk-card p,.script-box p,.template-box div{font-size:13px;color:var(--ink2);line-height:1.6;margin-bottom:.45rem}
 .template-box{display:grid;gap:.55rem;background:#fff}
 .page-avoid{break-inside:avoid;page-break-inside:avoid}
-.page-break{break-before:page;page-break-before:always}
+.page-break{break-before:auto;page-break-before:auto}
+.premium-cover{background:linear-gradient(135deg,#10281d,#2f6a50);color:#fff;padding:1.55rem 1.75rem;display:grid;grid-template-columns:1fr 210px;gap:1.25rem;align-items:stretch}
+.premium-cover h2{font-family:"Instrument Serif",serif;font-size:1.85rem;font-weight:400;line-height:1.1;margin:.45rem 0 .35rem;color:#fff}
+.premium-eyebrow{font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.66)}
+.premium-meta{font-size:11px;color:rgba(255,255,255,.72);line-height:1.5}
+.premium-scorebox{background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.22);border-radius:14px;padding:1rem}
+.premium-scorebox .score{font-family:"Instrument Serif",serif;font-size:3.8rem;line-height:.88;color:#fff}
+.premium-pill{display:inline-flex;border-radius:999px;padding:5px 9px;background:#fff2d1;color:#6d4d00;font-size:10px;font-weight:800;margin-top:.5rem}
+.premium-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:1rem}
+.premium-lead{font-family:"Instrument Serif",serif;font-size:1.25rem;line-height:1.35;color:#172a21;margin-bottom:.75rem}
+.premium-note{border-left:4px solid var(--g2);background:#f3f7f4;border-radius:0 10px 10px 0;padding:.85rem 1rem;color:#243a30;font-size:13px;line-height:1.6;margin-top:.85rem}
+.metric-row{display:grid;grid-template-columns:132px 1fr 42px;gap:8px;align-items:center;margin:.55rem 0;font-size:12px;color:var(--ink2)}
+.metric-bar{height:8px;background:#e7ece8;border-radius:999px;overflow:hidden}
+.metric-fill{height:100%;background:var(--g2);border-radius:999px}
+.metric-fill.warn{background:#b98518}.metric-fill.bad{background:#9a2f2f}
+.riskcards-premium{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem}
+.risk-premium{border:1px solid #ead9d9;background:#fff8f7;border-radius:12px;padding:.9rem}
+.risk-premium h5{font-size:13px;font-weight:800;color:#7b2222;margin:0 0 .4rem}
+.risk-premium p{font-size:12px;color:#4b4541;line-height:1.5;margin:.35rem 0}
+.timeline-premium{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem}
+.step-premium{border:1px solid #d7ddd6;background:#f8faf8;border-radius:12px;padding:.9rem;break-inside:avoid;page-break-inside:avoid}
+.step-premium .tag{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--g2);font-weight:800}
+.step-premium h5{font-size:13px;color:var(--ink);margin:.35rem 0}
+.step-premium p{font-size:12px;color:var(--ink2);line-height:1.5;margin:.25rem 0}
+.proof-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem}
+.proof-card{border:1px solid #dce2dc;border-radius:12px;padding:.9rem;background:#fbfcfb}
+.proof-card b{display:block;font-size:11px;color:var(--g2);margin-bottom:.35rem}.proof-card span{font-size:12px;color:var(--ink2);line-height:1.45}
+.script-premium{border-left:4px solid var(--g2);background:#f3f7f4;border-radius:0 10px 10px 0;padding:.85rem 1rem;color:#243a30;font-size:13px;line-height:1.6;margin:.6rem 0}
+.upsell-premium{background:linear-gradient(135deg,#10281d,#26553f);color:#fff;border-radius:14px;padding:1.25rem}
+.upsell-premium h4{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#cde1d6;margin:0 0 .6rem}
+.upsell-premium .lead{font-family:"Instrument Serif",serif;font-size:1.35rem;line-height:1.25;color:#fff;margin-bottom:.5rem}
+.upsell-premium p{font-size:12.5px;color:#d6e6de;line-height:1.55;margin-bottom:.9rem}
+.upsell-grid-premium{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem}
+.offer-premium{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.22);border-radius:12px;padding:.9rem}
+.offer-premium .fit{display:inline-flex;font-size:9px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;border-radius:999px;padding:4px 7px;background:#fff2d1;color:#6d4d00;margin-bottom:.55rem}
+.offer-premium .name{font-size:13px;font-weight:800;color:#fff}.offer-premium .price{font-family:"Instrument Serif",serif;font-size:1.55rem;color:#fff;margin:.35rem 0}.offer-premium ul{padding-left:16px;color:#d6e6de;font-size:11.5px;line-height:1.45;margin:0}.offer-premium li{margin:.25rem 0}
 /* Legal footer */
 .legal-caveat{background:var(--bg);border-top:1px solid var(--bdr);padding:1rem 1.75rem;font-size:10px;color:var(--ink4);line-height:1.65}
 .sdr{display:flex;align-items:center;gap:8px}
@@ -265,7 +326,8 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--ink);min-
 .lock-err{font-size:12px;color:var(--r);margin-top:.5rem;min-height:16px}
 .lock-cancel{background:none;border:none;font-size:12px;color:var(--ink3);cursor:pointer;font-family:inherit;margin-top:.65rem}
 @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
-@media(max-width:600px){.fg,.fg3{grid-template-columns:1fr}.rg{grid-template-columns:1fr}.otlk-grid{grid-template-columns:1fr}}
+@media(max-width:860px){.assessment-hero-inner,.assessment-grid{grid-template-columns:1fr}.assessment-side{position:static}.assessment-hero h1{font-size:2.25rem}.hero-score-card{min-height:170px}}
+@media(max-width:600px){.fg,.fg3{grid-template-columns:1fr}.rg{grid-template-columns:1fr}.otlk-grid{grid-template-columns:1fr}.assessment-shell{padding:1rem 1rem 4rem}.assessment-hero-inner{padding:1.35rem}.riskcards-premium,.timeline-premium,.proof-grid,.upsell-grid-premium,.premium-grid{grid-template-columns:1fr}.premium-cover{grid-template-columns:1fr}}
 @media print{
   .nav,.btn-row,.email-box,.paste-box,.rev-hd,.gen-loading{display:none!important}
   .ai-status,.edit-note{display:none!important}
@@ -277,8 +339,9 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--ink);min-
   .snap-doc{display:block!important;border:none;border-radius:0}
   .snap-doc.editing{outline:none!important;box-shadow:none!important}
   .snap-doc *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .snap-sec{break-inside:avoid;page-break-inside:avoid}
-  .page-break{break-before:page;page-break-before:always}
+  .snap-sec{break-inside:auto;page-break-inside:auto}
+  .risk-premium,.step-premium,.proof-card,.offer-premium,.script-premium,.premium-note{break-inside:avoid;page-break-inside:avoid}
+  .page-break{break-before:auto;page-break-before:auto}
 }
 </style>
 </head>
@@ -307,18 +370,46 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--ink);min-
 
 <!-- ASSESSMENT FORM -->
 <div class="sc on" id="sc-form">
-<div class="wrap">
-  <div class="fhd">
-    <div class="eyebrow">Job Risk Diagnostic for Mid-Career Professionals</div>
-    <h1>CareerShield&#8482;<br><em>Job Risk Diagnostic</em></h1>
-    <p>Find out where your current role is exposed, what is still working in your favour, and what to do over the next 90 days.</p>
-    <p style="margin-top:.85rem;font-size:14px;color:var(--ink2);max-width:560px;line-height:1.65">Most career risk does not arrive suddenly. It builds quietly through low visibility, manager dependency, weak external options, AI pressure, and financial stress. CareerShield helps you see the pattern before it becomes a crisis.</p>
+<div class="assessment-shell">
+  <div class="assessment-hero">
+    <div class="assessment-hero-inner">
+      <div>
+        <div class="eyebrow">Job Risk Diagnostic for Mid-Career Professionals</div>
+        <h1>CareerShield&#8482;<br><em>Job Risk Diagnostic</em></h1>
+        <p>Find out where your current role is exposed, what is still working in your favour, and what to do over the next 90 days.</p>
+        <p>Most career risk does not arrive suddenly. It builds quietly through low visibility, manager dependency, weak external options, AI pressure, and financial stress. CareerShield helps you see the pattern before it becomes a crisis.</p>
+        <div class="hero-pills">
+          <span class="hero-pill">Instant score</span>
+          <span class="hero-pill">Role-specific signal</span>
+          <span class="hero-pill">90-day stability plan</span>
+        </div>
+      </div>
+      <div class="hero-score-card">
+        <div>
+          <div class="mini-label">What you will get first</div>
+          <div class="bigline">A clear risk read, not a generic career quiz.</div>
+        </div>
+        <div class="copy">The free result gives your score, risk band, dominant pattern, and one sharp insight. The paid report turns it into actions, scripts, proof points, and next moves.</div>
+      </div>
+    </div>
   </div>
 
-  <div class="prog-wrap">
-    <div class="prog-meta"><span id="prog-txt">0 of 25 answered</span><span id="prog-pct">0%</span></div>
-    <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
-  </div>
+  <div class="assessment-grid">
+    <aside class="assessment-side">
+      <div class="side-title">How this works</div>
+      <div class="side-copy">Answer honestly. The tool reads your role, sub-function, market exposure, visibility, optionality, AI pressure, and financial stress together.</div>
+      <div class="side-list">
+        <div class="side-item"><div class="side-num">1</div><div><b>Profile context</b><span>Role, sub-function, industry, and stated fear.</span></div></div>
+        <div class="side-item"><div class="side-num">2</div><div><b>25 diagnostic signals</b><span>Visibility, AI exposure, market options, politics, and resilience.</span></div></div>
+        <div class="side-item"><div class="side-num">3</div><div><b>CareerShield output</b><span>Free mirror first. Paid report only if you want the full action plan.</span></div></div>
+      </div>
+    </aside>
+
+    <main class="assessment-main">
+      <div class="prog-wrap">
+        <div class="prog-meta"><span id="prog-txt">0 of 25 answered</span><span id="prog-pct">0%</span></div>
+        <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+      </div>
 
   <div class="pbox">
     <div class="blabel">Your Profile</div>
@@ -370,6 +461,8 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--ink);min-
     <span class="snote">Free &#183; 5&#8211;6 minutes &#183; Instant result</span>
   </div>
   <div class="errmsg" id="ferr">Please complete all required fields.</div>
+    </main>
+  </div>
 </div>
 </div>
 
@@ -2031,32 +2124,61 @@ function buildSnapFromAI(r,report){
   setReportEditMode(false);
   var p=r.profile, role=getRoleData(p.roleKey,p.roleSubKey), roleLabel=p.roleSubLabel||p.roleLabel||role.label;
   var sigs=r.secondarySignals||[], genDate=new Date().toLocaleDateString('en-IN');
-  function list(items){return '<ul class="slist">'+items.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>';}
-  function pblock(label,text){return '<p><strong>'+label+':</strong> '+esc(text)+'</p>';}
-  var riskHtml=report.risks.map(function(x){return '<div class="risk-card"><h5>'+esc(x.name)+'</h5>'+pblock('What it means in daily work',x.daily)+pblock('Why it matters',x.why)+pblock('Early warning signs',x.warning)+pblock('What to do first',x.first)+'</div>';}).join('');
-  var planHtml=report.actionPlan.map(function(x){return '<div class="astage page-avoid"><div class="astage-hd"><span class="astage-tag">'+esc(x.stage)+'</span><span class="astage-title">'+esc(x.title)+'</span></div>'+pblock('Exact action',x.action)+pblock('Output to create',x.output)+pblock('Who to share it with',x.share)+pblock('Mistake to avoid',x.avoid)+pblock('Success signal',x.success)+'</div>';}).join('');
-  var scriptHtml='<div class="script-box"><h5>A. Manager check-in script</h5><p>'+esc(report.scripts.manager)+'</p></div><div class="script-box"><h5>B. Stakeholder visibility script</h5><p>'+esc(report.scripts.stakeholder)+'</p></div><div class="script-box"><h5>C. External network reactivation script</h5><p>'+esc(report.scripts.network)+'</p></div>';
-  var templateHtml='<div class="template-box">'+report.visibilityTemplate.map(function(x){return '<div>'+esc(x)+' ______________________________</div>';}).join('')+'</div>';
+  report=report||buildPaidReport(r);
+  report.risks=(report.risks&&report.risks.length?report.risks:r.topRisks)||[];
+  report.actionPlan=(report.actionPlan&&report.actionPlan.length?report.actionPlan:r.actionPlan)||[];
+  report.strengths=report.strengths&&report.strengths.length?report.strengths:strongestSupported(r,role,rankedDims(r,'high'));
+  report.scripts=report.scripts||{};
+  report.managerRiskGuide=report.managerRiskGuide||{};
+  report.externalMarketChecklist=report.externalMarketChecklist||[];
+  report.visibilityTemplate=report.visibilityTemplate||[];
+
+  function cleanVoice(txt){return String(txt||'').replace(new RegExp('\\b'+(p.name||'').split(' ')[0]+'\\b','g'),'you');}
+  function list(items,cls){return '<ul class="slist '+(cls||'')+'">'+(items||[]).map(function(x){return '<li>'+esc(cleanVoice(x))+'</li>';}).join('')+'</ul>';}
+  function short(txt,n){txt=String(txt||'');return txt.length>n?txt.slice(0,n-1).replace(/\s+\S*$/,'')+'.':txt;}
+  function metric(label,pct,kind,val){return '<div class="metric-row"><span>'+esc(label)+'</span><div class="metric-bar"><div class="metric-fill '+(kind||'')+'" style="width:'+Math.max(4,Math.min(100,pct))+'%"></div></div><b>'+esc(val||pct)+'</b></div>';}
+  function proof(label,text){return '<div class="proof-card"><b>'+esc(label)+'</b><span>'+esc(cleanVoice(text))+'</span></div>';}
+
+  var low=rankedDims(r,'low'), high=rankedDims(r,'high');
+  var neutralCount=0;QS.forEach(function(q){if((r.answers||{})[q.id]===3)neutralCount++;});
+  var spread=(high[0]?high[0].pct:0)-(low[0]?low[0].pct:0);
+  var patternPct=(r.pattern&&r.pattern.name&&r.pattern.name!=='Mixed Exposure Profile')?84:62;
+  var neutralPct=Math.max(8,Math.round((neutralCount/25)*100));
+  var reliabilityText=String(report.confidence||'This is not a prediction. It is a structured reading of your self-reported answers, role context, stated fear, and score pattern.');
+  reliabilityText=reliabilityText.replace(/^Confidence level:\s*(High|Medium|Low)\.?\s*/i,'').replace(/^High confidence\.?\s*/i,'').replace(/^Medium confidence\.?\s*/i,'').replace(/^Low confidence\.?\s*/i,'');
+  var scorePill=r.total>=90?'Stable, but maintain visibility':r.total>=70?'Hidden risk: act early':r.total>=50?'Significant exposure: start now':'Immediate stabilisation needed';
+
+  var riskHtml=report.risks.slice(0,3).map(function(x){
+    return '<div class="risk-premium"><h5>'+esc(cleanVoice(x.name))+'</h5><p><strong>Daily signal:</strong> '+esc(short(cleanVoice(x.daily),230))+'</p><p><strong>First move:</strong> '+esc(short(cleanVoice(x.first),190))+'</p></div>';
+  }).join('');
+  var planHtml=report.actionPlan.slice(0,4).map(function(x){
+    return '<div class="step-premium"><div class="tag">'+esc(cleanVoice(x.stage))+'</div><h5>'+esc(cleanVoice(x.title))+'</h5><p><strong>Action:</strong> '+esc(cleanVoice(x.action))+'</p><p><strong>Output:</strong> '+esc(cleanVoice(x.output))+'</p><p><strong>Success:</strong> '+esc(cleanVoice(x.success))+'</p></div>';
+  }).join('');
+  var scriptHtml='<div class="script-premium"><strong>Manager check-in:</strong><br>'+esc(cleanVoice(report.scripts.manager||''))+'</div>'
+    +'<div class="script-premium"><strong>Stakeholder visibility:</strong><br>'+esc(cleanVoice(report.scripts.stakeholder||''))+'</div>'
+    +'<div class="script-premium"><strong>External network reactivation:</strong><br>'+esc(cleanVoice(report.scripts.network||''))+'</div>';
   var guide=report.managerRiskGuide;
-  var guideHtml=list(['When to speak directly: '+guide.speak,'When to stay careful: '+guide.careful,'What not to say: '+guide.dont,'Signs manager may be defensive: '+guide.defensive,'Safe phrasing: '+guide.phrasing]);
-  var runwayHtml=(r.includeRunwayNote&&report.side_income_pov)?'<div class="snap-sec page-break"><h4>Optional Runway-Building Note</h4><div class="side-box"><p>'+esc(report.side_income_pov)+'</p></div><p style="font-size:11px;color:var(--ink3);margin-top:.6rem;line-height:1.5">This is optional. It is not the solution to job risk and not business advice.</p></div>':'';
+  var guideHtml=list(['When to speak directly: '+(guide.speak||''),'When to stay careful: '+(guide.careful||''),'What not to say: '+(guide.dont||''),'Signs of defensiveness: '+(guide.defensive||''),'Safe phrasing: '+(guide.phrasing||'')]);
+  var templateHtml='<div class="proof-grid">'
+    +proof('Problem handled','Write the customer, process, delivery, people, risk, or business problem you handled.')
+    +proof('Business impact','State what improved: time, quality, risk, revenue, cost, customer experience, compliance, or stakeholder trust.')
+    +proof('Judgment used','Explain the decision or tradeoff you made that was not just task execution.')
+    +'</div><div class="template-box" style="margin-top:.75rem">'+report.visibilityTemplate.map(function(x){return '<div>'+esc(cleanVoice(x))+' ______________________________</div>';}).join('')+'</div>';
+  var runwayHtml=(r.includeRunwayNote&&report.side_income_pov)?'<div class="snap-sec"><h4>Optional Runway-Building Note</h4><div class="side-box"><p>'+esc(cleanVoice(report.side_income_pov))+'</p></div><p style="font-size:11px;color:var(--ink3);margin-top:.6rem;line-height:1.5">This is optional. It is not the solution to job risk and not business advice.</p></div>':'';
   var upsellHtml='';
   if(r.includeUpsell!==false){
-    upsellHtml='<div class="snap-sec page-break"><div class="upsell-sec"><h4>Optional Deeper Support</h4><p>This report is designed to be useful on its own. These options are only for people who want human review, accountability, or a deeper second layer.</p><div class="upsell-options"><div class="uopt"><div class="uopt-name">AI Role Audit</div><div class="uopt-desc">Review how AI pressure affects your exact role and what to reposition in 60 days.</div><div class="uopt-price">&#8377;2,999</div></div><div class="uopt"><div class="uopt-name">Career Risk Audit</div><div class="uopt-desc">A deeper review of manager risk, visibility, market readiness, and next decisions.</div><div class="uopt-price">&#8377;7,500</div></div><div class="uopt"><div class="uopt-name">Career Recovery Roadmap</div><div class="uopt-desc">Hands-on roadmap for high-risk or urgent profiles that need structured recovery.</div><div class="uopt-price">&#8377;15,000</div></div></div><p style="font-size:11px;opacity:.75;margin-top:1rem">Optional only. Start with the 90-day plan first if you can act independently.</p></div></div>';
+    upsellHtml='<div class="snap-sec"><div class="upsell-premium"><h4>Optional Deeper Support</h4><div class="lead">The report is designed to stand on its own. These options are only for people who want a second layer of human review, sharper prioritisation, or guided execution.</div><p>For your '+esc(roleLabel)+' profile, the strongest next step is a practical review of which parts of the role can be repositioned toward proof, visibility, market options, and automation-resistant value.</p><div class="upsell-grid-premium"><div class="offer-premium"><span class="fit">Best for AI concern</span><div class="name">AI Role Audit</div><div class="price">Rs. 2,999</div><ul><li>Role-task exposure map</li><li>AI-resistant work angles</li><li>60-day repositioning notes</li></ul></div><div class="offer-premium"><span class="fit">Best for hidden risk</span><div class="name">Career Risk Audit</div><div class="price">Rs. 7,500</div><ul><li>Profile and report review</li><li>Manager conversation prep</li><li>Internal visibility plan</li></ul></div><div class="offer-premium"><span class="fit">Best for urgent profiles</span><div class="name">Career Recovery Roadmap</div><div class="price">Rs. 15,000</div><ul><li>90-day execution roadmap</li><li>Resume and LinkedIn direction</li><li>Weekly action priorities</li></ul></div></div><p style="font-size:11px;color:#c8dbd1;margin-top:1rem;margin-bottom:0">Optional only. Start with the report if you can act independently. Choose deeper support only if you want human review, accountability, or help translating the report into decisions.</p></div></div>';
   }
   var doc=document.getElementById('snap-doc');
-  doc.innerHTML='<div class="snap-top"><div class="se">CareerShield&#8482; - Job Risk Diagnostic for Mid-Career Professionals</div><h2 id="sn-name">'+esc(p.name||'Professional')+' - CareerShield Report</h2><div class="sm" id="sn-meta">'+esc([roleLabel,p.industry,'Generated '+genDate].filter(Boolean).join(' | '))+'</div></div>'
-    +'<div class="snap-body"><div class="snap-srow"><div class="snap-snum" id="sn-score">'+esc(r.total)+'</div><div class="snap-smeta"><div class="oo">out of 125</div><div class="rl" id="sn-rl">'+esc((r.riskCat||{}).lbl||'-')+'</div><div><span class="badge '+esc((r.riskCat||{}).cls||'b-med')+'">'+esc((r.riskCat||{}).lbl||'-')+'</span></div></div><div style="flex:1;min-width:180px"><div class="plabel">Dominant Pattern</div><div id="sn-pat" style="font-size:13px;font-weight:700;color:var(--ink)">'+esc((r.pattern||{}).name||'-')+(sigs.length?' + '+esc(sigs.join(', ')):'')+'</div><div style="font-size:12px;color:var(--ink3);margin-top:.35rem">Confidence Level: '+esc(r.confidenceLevel||'-')+'</div></div></div>'
-    +'<div class="snap-secs"><div class="snap-sec"><h4>What This Score Means</h4><p>'+esc(report.score_interpretation)+'</p></div>'
-    +'<div class="snap-sec"><h4>Diagnostic Confidence Level</h4><div class="confidence-box"><div class="level">'+esc(r.confidenceLevel||'-')+' confidence</div><p>'+esc(report.confidence)+'</p></div></div>'
-    +'<div class="snap-sec page-break"><h4>Your Top 3 Risks</h4>'+riskHtml+'</div>'
-    +'<div class="snap-sec"><h4>What Is Working In Your Favour</h4>'+list(report.strengths)+'</div>'
-    +'<div class="snap-sec page-break"><h4>Your 90-Day Career Stability Plan</h4>'+planHtml+'</div>'
-    +'<div class="snap-sec page-break"><h4>Exact Message Scripts</h4>'+scriptHtml+'</div>'
+  doc.innerHTML='<div class="premium-cover"><div><div class="premium-eyebrow">CareerShield&#8482; - Job Risk Diagnostic for Mid-Career Professionals</div><h2 id="sn-name">'+esc(p.name||'Professional')+' - CareerShield Report</h2><div class="premium-meta" id="sn-meta">'+esc([roleLabel,p.industry,'Generated '+genDate].filter(Boolean).join(' | '))+'</div></div><div class="premium-scorebox"><div class="premium-eyebrow">Score</div><div class="score" id="sn-score">'+esc(r.total)+'</div><div class="premium-meta">out of 125</div><span class="premium-pill">'+esc(scorePill)+'</span></div></div>'
+    +'<div class="snap-body"><div class="snap-secs"><div class="premium-grid"><div class="snap-sec"><h4>What This Actually Means</h4><div class="premium-lead">'+esc(short(cleanVoice(report.score_interpretation),260))+'</div><p style="font-size:13px;color:var(--ink2);line-height:1.65">'+esc(cleanVoice(report.pattern_para1||''))+'</p><div class="premium-note">Do not try to simply work harder for the next 90 days. Create proof that your role carries judgment, escalation handling, problem-solving, stakeholder trust, or business impact that routine automation cannot replace.</div></div><div class="snap-sec"><h4>Diagnostic Reliability</h4><p style="font-size:13px;color:var(--ink2);line-height:1.6"><strong>Reliability: '+esc(r.confidenceLevel||'-')+'.</strong> '+esc(cleanVoice(reliabilityText))+'</p>'+metric('Pattern clarity',patternPct,'',patternPct)+metric('Neutral answers',neutralPct,neutralCount>8?'warn':'',neutralCount) + metric('Risk spread',Math.max(8,spread),spread>35?'bad':'warn',spread)+'</div></div>'
+    +'<div class="snap-sec"><h4>Top 3 Risks</h4><div class="riskcards-premium">'+riskHtml+'</div></div>'
+    +'<div class="snap-sec"><h4>What Is Working In Your Favour</h4>'+list(report.strengths,'good')+'</div>'
+    +'<div class="snap-sec"><h4>90-Day Stability Intervention</h4><div class="timeline-premium">'+planHtml+'</div></div>'
+    +'<div class="snap-sec"><h4>Exact Message Scripts</h4>'+scriptHtml+'</div>'
     +'<div class="snap-sec"><h4>Internal Visibility Template</h4>'+templateHtml+'</div>'
-    +'<div class="snap-sec page-break"><h4>Manager Conversation Risk Guide</h4>'+guideHtml+'</div>'
-    +'<div class="snap-sec"><h4>External Market Repositioning Checklist</h4>'+list(report.externalMarketChecklist)+'</div>'
-    +'<div class="snap-sec page-break"><h4>90-Day Outlook</h4><div class="otlk-grid"><div class="otlk-cell act"><div class="olbl">If You Act</div><p>'+esc(report.outlook_act)+'</p></div><div class="otlk-cell dont"><div class="olbl">If You Wait</div><p>'+esc(report.outlook_dont)+'</p></div></div><div class="otlk-key">'+esc(report.outlook_key)+'</div></div>'
+    +'<div class="premium-grid"><div class="snap-sec"><h4>Manager Conversation Risk Guide</h4>'+guideHtml+'</div><div class="snap-sec"><h4>External Market Repositioning Snapshot</h4><div class="premium-lead" style="font-size:1.05rem">Current label: '+esc(roleLabel)+'. Safer label: outcome owner in '+esc(p.industry||'your market')+'.</div>'+list(report.externalMarketChecklist)+'</div></div>'
+    +'<div class="snap-sec"><h4>90-Day Outlook</h4><div class="otlk-grid"><div class="otlk-cell act"><div class="olbl">If You Act</div><p>'+esc(cleanVoice(report.outlook_act))+'</p></div><div class="otlk-cell dont"><div class="olbl">If You Wait</div><p>'+esc(cleanVoice(report.outlook_dont))+'</p></div></div><div class="otlk-key">'+esc(cleanVoice(report.outlook_key))+'</div></div>'
     +runwayHtml+upsellHtml+'</div></div>'
     +'<div class="legal-caveat"><strong>Diagnostic disclaimer:</strong> This report is generated from a self-assessment and is for informational, educational, and reflective use only. It is not legal, financial, medical, psychological, business, employment, investment, or professional advice, and it should not be treated as an instruction to resign, invest, start a business, confront an employer, or make any major career or financial decision. The analysis is based on self-reported answers and general role-market patterns; it may be incomplete, inaccurate, or not applicable to your employer, sector, location, health, finances, or personal circumstances. CareerShield and its operators are not responsible for any loss, distress, employment outcome, financial outcome, business outcome, relationship issue, or other consequence arising from decisions made after reading this report. If you are under severe stress, facing a legal/employment dispute, or considering a major financial or career move, speak with a qualified professional before acting.</div><div class="snap-ft"><span id="sn-ft-nm">'+esc((p.name||'')+(roleLabel?' - '+roleLabel:''))+'</span><span style="color:var(--ink4)">CareerShield&#8482;</span><span id="sn-ft-dt">Generated: '+genDate+'</span></div>';
   doc.classList.add('on');
@@ -2111,7 +2233,7 @@ function dlWord(){
   if(!doc.classList.contains('on')){alert('Generate the report first.');return;}
   setReportEditMode(false);
   var nm=document.getElementById('sn-ft-nm').textContent||'report';
-  var wordHtml='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><title>CareerShield Report</title><style>body{font-family:Calibri,Arial,sans-serif;font-size:11pt;line-height:1.55;margin:2cm;color:#1a1a18}h2{font-size:18pt;color:#1a3a2a}h4{font-size:13pt;color:#1a3a2a;margin-top:16pt;border-top:1pt solid #e4e3dc;padding-top:8pt}h5{font-size:11pt;margin-bottom:4pt}p,li,div{font-size:11pt}.snap-snum{font-size:28pt;color:#1a3a2a;font-weight:bold}.badge,.btn-row,.email-box{display:none}.legal-caveat{font-size:8pt;color:#666;border-top:1pt solid #ddd;margin-top:20pt;padding-top:8pt}.page-break{page-break-before:always}</style></head><body>'+doc.innerHTML+'</body></html>';
+  var wordHtml='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><title>CareerShield Report</title><style>body{font-family:Calibri,Arial,sans-serif;font-size:11pt;line-height:1.55;margin:2cm;color:#1a1a18}h2{font-size:18pt;color:#1a3a2a}h4{font-size:13pt;color:#1a3a2a;margin-top:16pt;border-top:1pt solid #e4e3dc;padding-top:8pt}h5{font-size:11pt;margin-bottom:4pt}p,li,div{font-size:11pt}.premium-cover,.upsell-premium{background:#1a3a2a;color:#fff;padding:14pt}.premium-scorebox,.risk-premium,.step-premium,.proof-card,.offer-premium{border:1pt solid #d7ddd6;padding:9pt;margin:5pt 0}.premium-lead{font-size:14pt;color:#1a3a2a}.score{font-size:28pt;color:#1a3a2a;font-weight:bold}.badge,.btn-row,.email-box{display:none}.legal-caveat{font-size:8pt;color:#666;border-top:1pt solid #ddd;margin-top:20pt;padding-top:8pt}.page-break{page-break-before:auto}</style></head><body>'+doc.innerHTML+'</body></html>';
   dlBlob(new Blob([wordHtml],{type:'application/msword'}),safe(nm)+'-careershield.doc');
 }
 function copySnap(){cpText((document.getElementById('snap-doc').innerText||'').trim());}

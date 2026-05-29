@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -693,6 +694,8 @@ var CFG = {
   sheetsUrl:  'https://script.google.com/macros/s/AKfycbw_vLfqx8mrkzbY38H41V6Y0Wjmq3D0n_-ISRUncVshRYDheKXc2SbX8P_95iRw0b9TGg/exec',
   // Same Apps Script endpoint can privately call OpenAI from the backend. Keep the OpenAI key in Apps Script Properties, never in this HTML.
   aiReportUrl: 'https://script.google.com/macros/s/AKfycbw_vLfqx8mrkzbY38H41V6Y0Wjmq3D0n_-ISRUncVshRYDheKXc2SbX8P_95iRw0b9TGg/exec',
+  // Lightweight backup tracker. This writes a compact row even when full JSON POST is blocked by hosting/CORS/browser behaviour.
+  leadTrackerUrl: 'https://script.google.com/macros/s/AKfycbw_vLfqx8mrkzbY38H41V6Y0Wjmq3D0n_-ISRUncVshRYDheKXc2SbX8P_95iRw0b9TGg/exec',
   // Must match ADMIN_TOKEN in Apps Script. Change both before production use.
   aiAdminToken: 'vishal2025',
   // Production mode: do not silently send hardwired local reports as final reports.
@@ -1385,6 +1388,7 @@ function submitForm(){
 
   saveResult(curResult);
   toSheets(curResult);
+  trackLead(curResult);
   goPublic('thanks');
   showPreview(curResult);
 }
@@ -1453,6 +1457,29 @@ function toSheets(r){
   try{
     fetch(CFG.sheetsUrl,{method:'POST',mode:'no-cors',keepalive:true,headers:{'Content-Type':'text/plain;charset=utf-8'},body:payload}).catch(function(){});
   }catch(e2){}
+}
+function trackLead(r){
+  if(!CFG.leadTrackerUrl||CFG.leadTrackerUrl==='YOUR_APPS_SCRIPT_URL') return;
+  var p=r.profile||{};
+  jsonp(CFG.leadTrackerUrl,{
+    action:'lead',
+    id:r.submissionId||'',
+    brand:r.brand||'CareerShield',
+    submittedAt:r.submittedAt||new Date().toISOString(),
+    name:p.name||'',
+    email:p.email||'',
+    role:p.roleLabel||p.role||'',
+    subFunction:p.roleSubLabel||'',
+    industry:p.industry||'',
+    exp:p.exp||'',
+    age:p.age||'',
+    fear:p.fear||'',
+    hobby:p.hobby||'',
+    score:r.total||'',
+    risk:(r.riskCat&&r.riskCat.lbl)||'',
+    pattern:(r.pattern&&r.pattern.name)||'',
+    confidence:r.confidenceLevel||''
+  },15000).catch(function(){});
 }
 
 // ============================================================

@@ -2196,7 +2196,13 @@ function buildSnapFromAI(r,report){
   var patternPct=(r.pattern&&r.pattern.name&&r.pattern.name!=='Mixed Exposure Profile')?84:62;
   var neutralPct=Math.max(8,Math.round((neutralCount/25)*100));
   var reliabilityText=String(report.confidence||'This is not a prediction. It is a structured reading of your self-reported answers, role context, stated fear, and score pattern.');
-  reliabilityText=reliabilityText.replace(/^Confidence level:\s*(High|Medium|Low)\.?\s*/i,'').replace(/^High confidence\.?\s*/i,'').replace(/^Medium confidence\.?\s*/i,'').replace(/^Low confidence\.?\s*/i,'');
+  reliabilityText=reliabilityText
+    .replace(/^(Diagnostic\s+)?Confidence\s+Level:\s*(High|Medium|Low)\.?\s*/i,'')
+    .replace(/^Reliability:\s*(High|Medium|Low)\.?\s*/i,'')
+    .replace(/^(High|Medium|Low)\s+confidence\.?\s*/i,'')
+    .replace(/^(High|Medium|Low)\.?\s*/i,'')
+    .trim();
+  if(!reliabilityText) reliabilityText='This does not predict the future. It means your answers gave enough signal to make the next 90 days more focused.';
   var scorePill=r.total>=90?'Stable, but maintain visibility':r.total>=70?'Hidden risk: act early':r.total>=50?'Significant exposure: start now':'Immediate stabilisation needed';
 
   var riskHtml=report.risks.slice(0,3).map(function(x){
@@ -2218,7 +2224,19 @@ function buildSnapFromAI(r,report){
   var runwayHtml=(r.includeRunwayNote&&report.side_income_pov)?'<div class="snap-sec"><h4>Optional Runway-Building Note</h4><div class="side-box"><p>'+esc(cleanVoice(report.side_income_pov))+'</p></div><p style="font-size:11px;color:var(--ink3);margin-top:.6rem;line-height:1.5">This is optional. It is not the solution to job risk and not business advice.</p></div>':'';
   var upsellHtml='';
   if(r.includeUpsell!==false){
-    upsellHtml='<div class="snap-sec"><div class="upsell-premium"><h4>Optional Deeper Support</h4><div class="lead">The report is designed to stand on its own. These options are only for people who want a second layer of human review, sharper prioritisation, or guided execution.</div><p>For your '+esc(roleLabel)+' profile, the strongest next step is a practical review of which parts of the role can be repositioned toward proof, visibility, market options, and automation-resistant value. Bookings are requested by email and include your original report ID automatically.</p><div class="upsell-grid-premium"><div class="offer-premium"><span class="fit">Best for AI concern</span><div class="name">AI Role Audit</div><div class="price">Rs. 2,999</div><ul><li>Role-task exposure map</li><li>AI-resistant work angles</li><li>60-day repositioning notes</li></ul><a href="#ai-role-audit" class="upsell-cta" onclick="return requestUpsell(&quot;AI Role Audit&quot;,&quot;Rs. 2,999&quot;)">Book Now</a></div><div class="offer-premium"><span class="fit">Best for hidden risk</span><div class="name">Career Risk Audit</div><div class="price">Rs. 7,500</div><ul><li>Profile and report review</li><li>Manager conversation prep</li><li>Internal visibility plan</li><li>2 live HRBP sessions during your 60-day execution window</li></ul><a href="#career-risk-audit" class="upsell-cta" onclick="return requestUpsell(&quot;Career Risk Audit&quot;,&quot;Rs. 7,500&quot;)">Book Now</a></div><div class="offer-premium"><span class="fit">Best for urgent profiles</span><div class="name">Career Recovery Roadmap</div><div class="price">Rs. 15,000</div><ul><li>90-day execution roadmap</li><li>Resume and LinkedIn direction</li><li>Weekly action priorities</li><li>4 live HRBP sessions during your 90-day roadmap</li></ul><a href="#career-recovery-roadmap" class="upsell-cta" onclick="return requestUpsell(&quot;Career Recovery Roadmap&quot;,&quot;Rs. 15,000&quot;)">Book Now</a></div></div><p style="font-size:11px;color:#c8dbd1;margin-top:1rem;margin-bottom:0">Optional only. Start with the report if you can act independently. Choose deeper support only if you want human review, accountability, or help translating the report into decisions. You can also email '+esc(CFG.email)+' directly.</p></div></div>';
+    upsellHtml=[
+      '<div class="snap-sec"><div class="upsell-premium">',
+      '<h4>Optional Deeper Support</h4>',
+      '<div class="lead">The report is designed to stand on its own. These options are only for people who want a second layer of human review, sharper prioritisation, or guided execution.</div>',
+      '<p>For your '+esc(roleLabel)+' profile, the strongest next step is a practical review of which parts of the role can be repositioned toward proof, visibility, market options, and automation-resistant value. Bookings are requested by email and include your original report ID automatically.</p>',
+      '<div class="upsell-grid-premium">',
+      '<div class="offer-premium"><span class="fit">Best for AI concern</span><div class="name">AI Role Audit</div><div class="price">Rs. 2,999</div><ul><li>Role-task exposure map</li><li>AI-resistant work angles</li><li>60-day repositioning notes</li></ul><a href="#ai-role-audit" class="upsell-cta" onclick="return requestUpsell(&quot;AI Role Audit&quot;,&quot;Rs. 2,999&quot;)">Book Now</a></div>',
+      '<div class="offer-premium"><span class="fit">Best for hidden risk</span><div class="name">Career Risk Audit</div><div class="price">Rs. 7,500</div><ul><li>Profile and report review</li><li>Manager conversation prep</li><li>Internal visibility plan</li><li>1 session with seasoned HRBP for practical clarity</li></ul><a href="#career-risk-audit" class="upsell-cta" onclick="return requestUpsell(&quot;Career Risk Audit&quot;,&quot;Rs. 7,500&quot;)">Book Now</a></div>',
+      '<div class="offer-premium"><span class="fit">Best for urgent profiles</span><div class="name">Career Recovery Roadmap</div><div class="price">Rs. 15,000</div><ul><li>90-day execution roadmap</li><li>Resume and LinkedIn direction</li><li>Weekly action priorities</li><li>2 sessions with seasoned HRBP for practical clarity</li></ul><a href="#career-recovery-roadmap" class="upsell-cta" onclick="return requestUpsell(&quot;Career Recovery Roadmap&quot;,&quot;Rs. 15,000&quot;)">Book Now</a></div>',
+      '</div>',
+      '<p style="font-size:11px;color:#c8dbd1;margin-top:1rem;margin-bottom:0">Optional only. Start with the report if you can act independently. Choose deeper support only if you want human review, accountability, or help translating the report into decisions. You can also email '+esc(CFG.email)+' directly.</p>',
+      '</div></div>'
+    ].join('');
   }
   var doc=document.getElementById('snap-doc');
   doc.innerHTML='<div class="premium-cover"><div><div class="premium-eyebrow">CareerShield&#8482; - Job Risk Diagnostic for Mid-Career Professionals</div><h2 id="sn-name">'+esc(p.name||'Professional')+' - CareerShield Report</h2><div class="premium-meta" id="sn-meta">'+esc([roleLabel,p.industry,'Generated '+genDate].filter(Boolean).join(' | '))+'</div></div><div class="premium-scorebox"><div class="premium-eyebrow">Score</div><div class="score" id="sn-score">'+esc(r.total)+'</div><div class="premium-meta">out of 125</div><span class="premium-pill">'+esc(scorePill)+'</span></div></div>'

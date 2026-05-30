@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -294,6 +295,8 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--ink);min-
 .offer-premium{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.22);border-radius:12px;padding:.9rem}
 .offer-premium .fit{display:inline-flex;font-size:9px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;border-radius:999px;padding:4px 7px;background:#fff2d1;color:#6d4d00;margin-bottom:.55rem}
 .offer-premium .name{font-size:13px;font-weight:800;color:#fff}.offer-premium .price{font-family:"Instrument Serif",serif;font-size:1.55rem;color:#fff;margin:.35rem 0}.offer-premium ul{padding-left:16px;color:#d6e6de;font-size:11.5px;line-height:1.45;margin:0}.offer-premium li{margin:.25rem 0}
+.upsell-cta{display:inline-flex;align-items:center;justify-content:center;margin-top:.75rem;border-radius:8px;background:#fff;color:#163927;border:none;padding:.55rem .75rem;font-size:11px;font-weight:800;text-decoration:none;cursor:pointer}
+.upsell-cta:hover{background:#fff2d1;color:#6d4d00}
 /* Legal footer */
 .legal-caveat{background:var(--bg);border-top:1px solid var(--bdr);padding:1rem 1.75rem;font-size:10px;color:var(--ink4);line-height:1.65}
 .sdr{display:flex;align-items:center;gap:8px}
@@ -789,12 +792,15 @@ var CFG = {
   aiReportUrl: 'https://script.google.com/macros/s/AKfycbw_vLfqx8mrkzbY38H41V6Y0Wjmq3D0n_-ISRUncVshRYDheKXc2SbX8P_95iRw0b9TGg/exec',
   // Lightweight backup tracker. This writes a compact row even when full JSON POST is blocked by hosting/CORS/browser behaviour.
   leadTrackerUrl: 'https://script.google.com/macros/s/AKfycbw_vLfqx8mrkzbY38H41V6Y0Wjmq3D0n_-ISRUncVshRYDheKXc2SbX8P_95iRw0b9TGg/exec',
+  // Records commercial clicks such as paid report unlock and upsell requests.
+  eventTrackerUrl: 'https://script.google.com/macros/s/AKfycbw_vLfqx8mrkzbY38H41V6Y0Wjmq3D0n_-ISRUncVshRYDheKXc2SbX8P_95iRw0b9TGg/exec',
   // Must match ADMIN_TOKEN in Apps Script. Change both before production use.
   aiAdminToken: 'vishal2025',
   // Production mode: do not silently send hardwired local reports as final reports.
   requireOpenAI: true,
   // Admin/contact email used in payment fallback and email export.
   email:      'vishal@careershield.in',
+  backupEmail:'vishal_profn@yahoo.com',
   // Replace with Razorpay/payment link. If unchanged, the CTA opens an email request instead of showing placeholder text.
   paymentUrl: 'YOUR_RAZORPAY_LINK'
 };
@@ -1125,7 +1131,7 @@ window.addEventListener('DOMContentLoaded',function(){
   installRoleTaxonomy();
   buildForm();
   var ce=document.getElementById('contact-link');
-  if(ce) ce.href='mailto:'+CFG.email;
+  if(ce) ce.href=mailtoUrl('CareerShield question','Hi CareerShield team, I have a question about the diagnostic.');
   if(window.location.search.indexOf('admin')>=0||window.location.hash==='#admin'){
     pendingMode='admin'; showLock();
   }
@@ -1574,6 +1580,52 @@ function trackLead(r){
     confidence:r.confidenceLevel||''
   },15000).catch(function(){});
 }
+function trackEvent(r,eventType,offer,price,notes){
+  if(!CFG.eventTrackerUrl||CFG.eventTrackerUrl==='YOUR_APPS_SCRIPT_URL') return;
+  r=r||curResult||{};
+  var p=r.profile||{};
+  jsonp(CFG.eventTrackerUrl,{
+    action:'event',
+    eventType:eventType||'event',
+    id:r.submissionId||'',
+    name:p.name||'',
+    email:p.email||'',
+    role:p.roleLabel||p.role||'',
+    subFunction:p.roleSubLabel||'',
+    industry:p.industry||'',
+    score:r.total||'',
+    risk:(r.riskCat&&r.riskCat.lbl)||'',
+    pattern:(r.pattern&&r.pattern.name)||'',
+    offer:offer||'',
+    price:price||'',
+    source:'CareerShield website',
+    notes:notes||''
+  },15000).catch(function(){});
+}
+function mailtoUrl(subject,body){
+  var cc=CFG.backupEmail?('&cc='+encodeURIComponent(CFG.backupEmail)):'';
+  return 'mailto:'+CFG.email+'?subject='+encodeURIComponent(subject||'CareerShield request')+cc+'&body='+encodeURIComponent(body||'');
+}
+function requestPaidReport(r){
+  r=r||curResult;
+  if(!r) return true;
+  var p=r.profile||{};
+  trackEvent(r,'paid_report_unlock_click','90-Day Career Stability Plan','Rs. 499','Clicked Unlock My 90-Day Career Stability Plan');
+  var body='Name: '+(p.name||'')+'\nEmail: '+(p.email||'')+'\nRole: '+(p.roleSubLabel||p.roleLabel||p.role||'')+'\nIndustry: '+(p.industry||'')+'\nScore: '+(r.total||'')+'/125\nRisk: '+((r.riskCat&&r.riskCat.lbl)||'')+'\nPattern: '+((r.pattern&&r.pattern.name)||'')+'\nID: '+(r.submissionId||'')+'\n\nI want to unlock my full CareerShield 90-Day Career Stability Plan for Rs. 499. Please confirm the payment/report delivery next step.';
+  var url=(CFG.paymentUrl&&CFG.paymentUrl!=='YOUR_RAZORPAY_LINK')
+    ?CFG.paymentUrl
+    :mailtoUrl('CareerShield 90-Day Plan Request - '+(p.name||'Client')+' ('+(r.submissionId||'')+')',body);
+  setTimeout(function(){window.location.href=url;},120);
+  return false;
+}
+function requestUpsell(offer,price){
+  var r=curResult||{};
+  var p=r.profile||{};
+  trackEvent(r,'upsell_request_click',offer,price,'Clicked optional deeper support CTA');
+  var body='Name: '+(p.name||'')+'\nEmail: '+(p.email||'')+'\nRole: '+(p.roleSubLabel||p.roleLabel||p.role||'')+'\nIndustry: '+(p.industry||'')+'\nScore: '+(r.total||'')+'/125\nRisk: '+((r.riskCat&&r.riskCat.lbl)||'')+'\nPattern: '+((r.pattern&&r.pattern.name)||'')+'\nOriginal Report ID: '+(r.submissionId||'')+'\nRequested support: '+offer+' - '+price+'\n\nI want to discuss this deeper support option. Please use my existing CareerShield report as context.';
+  window.location.href=mailtoUrl('CareerShield Upsell Request - '+offer+' - '+(p.name||'Client')+' ('+(r.submissionId||'')+')',body);
+  return false;
+}
 
 // ============================================================
 // FREE PREVIEW
@@ -1643,11 +1695,8 @@ function buildPreview(r){
   // CTA
   var ctaEl=document.getElementById('cta-btn');
   if(ctaEl){
-    var url=(CFG.paymentUrl&&CFG.paymentUrl!=='YOUR_RAZORPAY_LINK')
-      ?CFG.paymentUrl
-      :'mailto:'+CFG.email+'?subject='+encodeURIComponent('CareerShield 90-Day Plan Request - '+p.name+' ('+r.submissionId+')')+'&body='+encodeURIComponent('Name: '+p.name+'\nEmail: '+p.email+'\nRole: '+(p.roleSubLabel||p.roleLabel)+'\nScore: '+tot+'/125\nPattern: '+pat.name+'\nID: '+r.submissionId+'\n\nPlease send my full CareerShield 90-Day Career Stability Plan.');
-    ctaEl.href=url;
-    ctaEl.onclick=function(){window.location.href=url;return false;};
+    ctaEl.href='#unlock-report';
+    ctaEl.onclick=function(){return requestPaidReport(r);};
   }
 }
 
@@ -2167,7 +2216,7 @@ function buildSnapFromAI(r,report){
   var runwayHtml=(r.includeRunwayNote&&report.side_income_pov)?'<div class="snap-sec"><h4>Optional Runway-Building Note</h4><div class="side-box"><p>'+esc(cleanVoice(report.side_income_pov))+'</p></div><p style="font-size:11px;color:var(--ink3);margin-top:.6rem;line-height:1.5">This is optional. It is not the solution to job risk and not business advice.</p></div>':'';
   var upsellHtml='';
   if(r.includeUpsell!==false){
-    upsellHtml='<div class="snap-sec"><div class="upsell-premium"><h4>Optional Deeper Support</h4><div class="lead">The report is designed to stand on its own. These options are only for people who want a second layer of human review, sharper prioritisation, or guided execution.</div><p>For your '+esc(roleLabel)+' profile, the strongest next step is a practical review of which parts of the role can be repositioned toward proof, visibility, market options, and automation-resistant value.</p><div class="upsell-grid-premium"><div class="offer-premium"><span class="fit">Best for AI concern</span><div class="name">AI Role Audit</div><div class="price">Rs. 2,999</div><ul><li>Role-task exposure map</li><li>AI-resistant work angles</li><li>60-day repositioning notes</li></ul></div><div class="offer-premium"><span class="fit">Best for hidden risk</span><div class="name">Career Risk Audit</div><div class="price">Rs. 7,500</div><ul><li>Profile and report review</li><li>Manager conversation prep</li><li>Internal visibility plan</li></ul></div><div class="offer-premium"><span class="fit">Best for urgent profiles</span><div class="name">Career Recovery Roadmap</div><div class="price">Rs. 15,000</div><ul><li>90-day execution roadmap</li><li>Resume and LinkedIn direction</li><li>Weekly action priorities</li></ul></div></div><p style="font-size:11px;color:#c8dbd1;margin-top:1rem;margin-bottom:0">Optional only. Start with the report if you can act independently. Choose deeper support only if you want human review, accountability, or help translating the report into decisions.</p></div></div>';
+    upsellHtml='<div class="snap-sec"><div class="upsell-premium"><h4>Optional Deeper Support</h4><div class="lead">The report is designed to stand on its own. These options are only for people who want a second layer of human review, sharper prioritisation, or guided execution.</div><p>For your '+esc(roleLabel)+' profile, the strongest next step is a practical review of which parts of the role can be repositioned toward proof, visibility, market options, and automation-resistant value. Use the buttons below to request support by email; the original report ID is included automatically.</p><div class="upsell-grid-premium"><div class="offer-premium"><span class="fit">Best for AI concern</span><div class="name">AI Role Audit</div><div class="price">Rs. 2,999</div><ul><li>Role-task exposure map</li><li>AI-resistant work angles</li><li>60-day repositioning notes</li></ul><a href="#ai-role-audit" class="upsell-cta" onclick="return requestUpsell(&quot;AI Role Audit&quot;,&quot;Rs. 2,999&quot;)">Request AI Role Audit</a></div><div class="offer-premium"><span class="fit">Best for hidden risk</span><div class="name">Career Risk Audit</div><div class="price">Rs. 7,500</div><ul><li>Profile and report review</li><li>Manager conversation prep</li><li>Internal visibility plan</li></ul><a href="#career-risk-audit" class="upsell-cta" onclick="return requestUpsell(&quot;Career Risk Audit&quot;,&quot;Rs. 7,500&quot;)">Request Career Risk Audit</a></div><div class="offer-premium"><span class="fit">Best for urgent profiles</span><div class="name">Career Recovery Roadmap</div><div class="price">Rs. 15,000</div><ul><li>90-day execution roadmap</li><li>Resume and LinkedIn direction</li><li>Weekly action priorities</li></ul><a href="#career-recovery-roadmap" class="upsell-cta" onclick="return requestUpsell(&quot;Career Recovery Roadmap&quot;,&quot;Rs. 15,000&quot;)">Request Recovery Roadmap</a></div></div><p style="font-size:11px;color:#c8dbd1;margin-top:1rem;margin-bottom:0">Optional only. Start with the report if you can act independently. Choose deeper support only if you want human review, accountability, or help translating the report into decisions. You can also email '+esc(CFG.email)+' directly.</p></div></div>';
   }
   var doc=document.getElementById('snap-doc');
   doc.innerHTML='<div class="premium-cover"><div><div class="premium-eyebrow">CareerShield&#8482; - Job Risk Diagnostic for Mid-Career Professionals</div><h2 id="sn-name">'+esc(p.name||'Professional')+' - CareerShield Report</h2><div class="premium-meta" id="sn-meta">'+esc([roleLabel,p.industry,'Generated '+genDate].filter(Boolean).join(' | '))+'</div></div><div class="premium-scorebox"><div class="premium-eyebrow">Score</div><div class="score" id="sn-score">'+esc(r.total)+'</div><div class="premium-meta">out of 125</div><span class="premium-pill">'+esc(scorePill)+'</span></div></div>'
@@ -2233,7 +2282,7 @@ function dlWord(){
   if(!doc.classList.contains('on')){alert('Generate the report first.');return;}
   setReportEditMode(false);
   var nm=document.getElementById('sn-ft-nm').textContent||'report';
-  var wordHtml='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><title>CareerShield Report</title><style>body{font-family:Calibri,Arial,sans-serif;font-size:11pt;line-height:1.55;margin:2cm;color:#1a1a18}h2{font-size:18pt;color:#1a3a2a}h4{font-size:13pt;color:#1a3a2a;margin-top:16pt;border-top:1pt solid #e4e3dc;padding-top:8pt}h5{font-size:11pt;margin-bottom:4pt}p,li,div{font-size:11pt}.premium-cover,.upsell-premium{background:#1a3a2a;color:#fff;padding:14pt}.premium-scorebox,.risk-premium,.step-premium,.proof-card,.offer-premium{border:1pt solid #d7ddd6;padding:9pt;margin:5pt 0}.premium-lead{font-size:14pt;color:#1a3a2a}.score{font-size:28pt;color:#1a3a2a;font-weight:bold}.badge,.btn-row,.email-box{display:none}.legal-caveat{font-size:8pt;color:#666;border-top:1pt solid #ddd;margin-top:20pt;padding-top:8pt}.page-break{page-break-before:auto}</style></head><body>'+doc.innerHTML+'</body></html>';
+  var wordHtml='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><title>CareerShield Report</title><style>body{font-family:Calibri,Arial,sans-serif;font-size:11pt;line-height:1.55;margin:2cm;color:#1a1a18}h2{font-size:18pt;color:#1a3a2a}h4{font-size:13pt;color:#1a3a2a;margin-top:16pt;border-top:1pt solid #e4e3dc;padding-top:8pt}h5{font-size:11pt;margin-bottom:4pt}p,li,div{font-size:11pt}.premium-cover,.upsell-premium{background:#1a3a2a;color:#fff;padding:14pt}.premium-scorebox,.risk-premium,.step-premium,.proof-card,.offer-premium{border:1pt solid #d7ddd6;padding:9pt;margin:5pt 0}.premium-lead{font-size:14pt;color:#1a3a2a}.score{font-size:28pt;color:#1a3a2a;font-weight:bold}.badge,.btn-row,.email-box,.upsell-cta{display:none}.legal-caveat{font-size:8pt;color:#666;border-top:1pt solid #ddd;margin-top:20pt;padding-top:8pt}.page-break{page-break-before:auto}</style></head><body>'+doc.innerHTML+'</body></html>';
   dlBlob(new Blob([wordHtml],{type:'application/msword'}),safe(nm)+'-careershield.doc');
 }
 function copySnap(){cpText((document.getElementById('snap-doc').innerText||'').trim());}

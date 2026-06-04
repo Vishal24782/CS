@@ -127,6 +127,23 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--ink);min-
 .step-n{width:24px;height:24px;border-radius:50%;background:var(--g3);color:var(--g);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
 .step-t{font-size:13px;color:var(--ink2);line-height:1.5}
 .step-t strong{color:var(--ink);font-weight:600}
+.payment-bridge{display:none;background:#fff;border:1px solid #dfe8e2;border-radius:12px;padding:1.25rem 1.45rem;margin:1.25rem 0;box-shadow:0 12px 34px rgba(24,33,29,.05)}
+.payment-bridge.on{display:block}
+.payment-bridge h3{font-size:13px;font-weight:800;color:var(--ink);margin-bottom:.45rem}
+.payment-bridge p{font-size:12px;color:var(--ink2);line-height:1.55;margin-bottom:.85rem}
+.pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin:.85rem 0}
+.pay-chip{background:var(--bg);border:1px solid var(--bdr);border-radius:10px;padding:.85rem}
+.pay-chip .k{font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:.25rem}
+.pay-chip .v{font-size:14px;font-weight:800;color:var(--g);word-break:break-word}
+.pay-row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:flex-end;margin-top:.85rem}
+.pay-row input{font-family:"DM Sans",sans-serif;font-size:13px;padding:10px 12px;border:1px solid var(--bdr);border-radius:8px;background:var(--bg);color:var(--ink);outline:none;min-width:220px;flex:1}
+.policy-footer{border-top:1px solid var(--bdr);margin-top:2rem;padding:1.1rem 0 0;display:flex;gap:.7rem;flex-wrap:wrap;align-items:center;font-size:11px;color:var(--ink3)}
+.policy-footer button{border:none;background:transparent;color:var(--g2);font:inherit;font-weight:700;cursor:pointer;padding:0}
+.policy-panel{display:none;background:#fff;border:1px solid var(--bdr);border-radius:12px;padding:1.25rem;margin:1rem 0 0}
+.policy-panel.on{display:block}
+.policy-panel h3{font-size:13px;margin-bottom:.55rem;color:var(--ink)}
+.policy-panel p,.policy-panel li{font-size:12px;color:var(--ink2);line-height:1.6}
+.policy-panel ul{padding-left:1.1rem}
 /* ADMIN */
 .adm-wrap{max-width:900px;margin:0 auto;padding:2rem 1.5rem 5rem}
 .adm-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.75rem;padding-bottom:1.5rem;border-bottom:1px solid var(--bdr);gap:1rem;flex-wrap:wrap}
@@ -463,6 +480,11 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--ink);min-
     <span class="snote">Free &#183; 5&#8211;6 minutes &#183; Instant result</span>
   </div>
   <div class="errmsg" id="ferr">Please complete all required fields.</div>
+  <div class="policy-footer">
+    <span><strong>CareerShield</strong> is an online education / digital assessment tool. Paid reports are generated after payment confirmation.</span>
+    <span>Refunds: duplicate payment or verified non-delivery can be raised within 7 days.</span>
+    <span>Support: <a href="mailto:support@careershield.in" style="color:var(--g2);text-decoration:none">support@careershield.in</a></span>
+  </div>
     </main>
   </div>
 </div>
@@ -526,11 +548,34 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--ink);min-
     </div>
     <div class="next-steps">
       <h3>What happens after you click above</h3>
-      <div class="step-row"><div class="step-n">1</div><div class="step-t"><strong>Complete payment of &#8377;499</strong> &#8212; secure, one-time. Takes under a minute.</div></div>
-      <div class="step-row"><div class="step-n">2</div><div class="step-t"><strong>Your full CareerShield plan is generated</strong> from your 25 answers, role, sub-function, and stated fear.</div></div>
-      <div class="step-row"><div class="step-n">3</div><div class="step-t"><strong>Delivered to your email</strong> within 24 hours. You keep it permanently. No subscription.</div></div>
+      <div class="step-row"><div class="step-n">1</div><div class="step-t"><strong>Complete payment of &#8377;499</strong> &#8212; secure, one-time. If the payment gateway is still being activated, use the UPI bridge shown below.</div></div>
+      <div class="step-row"><div class="step-n">2</div><div class="step-t"><strong>Your full CareerShield plan is generated immediately after payment confirmation</strong> from your 25 answers, role, sub-function, and stated fear.</div></div>
+      <div class="step-row"><div class="step-n">3</div><div class="step-t"><strong>Sent to your email</strong> after confirmation and review. You keep it permanently. No subscription.</div></div>
+    </div>
+    <div class="payment-bridge" id="payment-bridge">
+      <h3>Temporary UPI Payment Bridge</h3>
+      <p>Use this only while the payment gateway is being activated. Pay &#8377;499 to the UPI ID below, enter the transaction/reference ID, and send the screenshot from the email that opens. Your payment intent is recorded with your CareerShield report ID.</p>
+      <div class="pay-grid">
+        <div class="pay-chip"><div class="k">Amount</div><div class="v">&#8377;499</div></div>
+        <div class="pay-chip"><div class="k">UPI ID</div><div class="v" id="upi-id-display">Update in config</div></div>
+      </div>
+      <div class="pay-row">
+        <input type="text" id="upi-txn" placeholder="Enter UPI transaction/reference ID">
+        <button class="btn-sec btn-pri" onclick="submitUpiPayment()">Submit Payment Details</button>
+      </div>
+      <p style="font-size:11px;color:var(--ink3);margin-top:.75rem;margin-bottom:0">You can also email the payment screenshot directly to <a id="payment-mail-link" href="#" style="color:var(--g2);text-decoration:none">support@careershield.in</a>.</p>
     </div>
     <p style="font-size:12px;color:var(--ink3);text-align:center">Questions? Email <a id="contact-link" href="#" style="color:var(--g2);text-decoration:none">us directly</a> and we will respond within a few hours.</p>
+    <div class="policy-footer">
+      <span>CareerShield is an educational diagnostic and planning toolkit.</span>
+      <button onclick="showPolicy('about')">About</button>
+      <button onclick="showPolicy('delivery')">Delivery</button>
+      <button onclick="showPolicy('refund')">Refunds</button>
+      <button onclick="showPolicy('privacy')">Privacy</button>
+      <button onclick="showPolicy('terms')">Terms</button>
+      <button onclick="showPolicy('contact')">Contact</button>
+    </div>
+    <div class="policy-panel" id="policy-panel"></div>
   </div>
 </div>
 </div>
@@ -798,8 +843,14 @@ var CFG = {
   // Production mode: do not silently send hardwired local reports as final reports.
   requireOpenAI: true,
   // Admin/contact email used in payment fallback and email export.
-  email:      'vishal@careershield.in',
-  backupEmail:'vishal_profn@yahoo.com',
+  email:      'support@careershield.in',
+  backupEmail:'info@careershield.in',
+  thirdEmail:'vishal@careershield.in',
+  // Temporary manual payment bridge while gateway approval is pending.
+  upiId:'UPDATE_UPI_ID_HERE',
+  businessName:'CareerShield',
+  registeredName:'CareerShield / Vishal',
+  registeredLocation:'India',
   // Replace with Razorpay/payment link. If unchanged, the CTA opens an email request instead of showing placeholder text.
   paymentUrl: 'YOUR_RAZORPAY_LINK'
 };
@@ -1131,6 +1182,10 @@ window.addEventListener('DOMContentLoaded',function(){
   buildForm();
   var ce=document.getElementById('contact-link');
   if(ce) ce.href=mailtoUrl('CareerShield question','Hi CareerShield team, I have a question about the diagnostic.');
+  var pe=document.getElementById('payment-mail-link');
+  if(pe) pe.href=mailtoUrl('CareerShield payment screenshot','Hi CareerShield team,\n\nI have paid Rs. 499 for the CareerShield report. Payment screenshot is attached.\n\nName:\nEmail:\nReport ID:\nUPI transaction/reference ID:');
+  var upiEl=document.getElementById('upi-id-display');
+  if(upiEl) upiEl.textContent=CFG.upiId||'Update in config';
   if(window.location.search.indexOf('admin')>=0||window.location.hash==='#admin'){
     pendingMode='admin'; showLock();
   }
@@ -1579,11 +1634,12 @@ function trackLead(r){
     confidence:r.confidenceLevel||''
   },15000).catch(function(){});
 }
-function trackEvent(r,eventType,offer,price,notes){
+function trackEvent(r,eventType,offer,price,notes,extra){
   if(!CFG.eventTrackerUrl||CFG.eventTrackerUrl==='YOUR_APPS_SCRIPT_URL') return;
   r=r||curResult||{};
   var p=r.profile||{};
-  jsonp(CFG.eventTrackerUrl,{
+  extra=extra||{};
+  var params={
     action:'event',
     eventType:eventType||'event',
     id:r.submissionId||'',
@@ -1599,22 +1655,53 @@ function trackEvent(r,eventType,offer,price,notes){
     price:price||'',
     source:'CareerShield website',
     notes:notes||''
-  },15000).catch(function(){});
+  };
+  Object.keys(extra).forEach(function(k){params[k]=extra[k];});
+  jsonp(CFG.eventTrackerUrl,params,15000).catch(function(){});
 }
 function mailtoUrl(subject,body){
-  var cc=CFG.backupEmail?('&cc='+encodeURIComponent(CFG.backupEmail)):'';
+  var ccList=[CFG.backupEmail,CFG.thirdEmail].filter(function(x){return !!x;}).join(',');
+  var cc=ccList?('&cc='+encodeURIComponent(ccList)):'';
   return 'mailto:'+CFG.email+'?subject='+encodeURIComponent(subject||'CareerShield request')+cc+'&body='+encodeURIComponent(body||'');
+}
+function showPaymentBridge(){
+  var box=document.getElementById('payment-bridge');
+  if(!box) return;
+  var upiEl=document.getElementById('upi-id-display');
+  if(upiEl) upiEl.textContent=CFG.upiId||'Update in config';
+  box.classList.add('on');
+  box.scrollIntoView({behavior:'smooth',block:'center'});
 }
 function requestPaidReport(r){
   r=r||curResult;
   if(!r) return true;
   var p=r.profile||{};
-  trackEvent(r,'paid_report_unlock_click','90-Day Career Stability Plan','Rs. 499','Clicked Unlock My 90-Day Career Stability Plan');
-  var body='Name: '+(p.name||'')+'\nEmail: '+(p.email||'')+'\nRole: '+(p.roleSubLabel||p.roleLabel||p.role||'')+'\nIndustry: '+(p.industry||'')+'\nScore: '+(r.total||'')+'/125\nRisk: '+((r.riskCat&&r.riskCat.lbl)||'')+'\nPattern: '+((r.pattern&&r.pattern.name)||'')+'\nID: '+(r.submissionId||'')+'\n\nI want to unlock my full CareerShield 90-Day Career Stability Plan for Rs. 499. Please confirm the payment/report delivery next step.';
-  var url=(CFG.paymentUrl&&CFG.paymentUrl!=='YOUR_RAZORPAY_LINK')
-    ?CFG.paymentUrl
-    :mailtoUrl('CareerShield 90-Day Plan Request - '+(p.name||'Client')+' ('+(r.submissionId||'')+')',body);
-  setTimeout(function(){window.location.href=url;},120);
+  trackEvent(r,'paid_report_unlock_click','90-Day Career Stability Plan','Rs. 499','Clicked Unlock My 90-Day Career Stability Plan',{paymentStatus:'Intent'});
+  if(CFG.paymentUrl&&CFG.paymentUrl!=='YOUR_RAZORPAY_LINK'){
+    setTimeout(function(){window.location.href=CFG.paymentUrl;},120);
+  } else {
+    showPaymentBridge();
+  }
+  return false;
+}
+function submitUpiPayment(){
+  var r=curResult||{};
+  var p=r.profile||{};
+  var txnEl=document.getElementById('upi-txn');
+  var txn=(txnEl&&txnEl.value||'').trim();
+  if(!txn){
+    alert('Please enter the UPI transaction/reference ID before submitting.');
+    if(txnEl) txnEl.focus();
+    return false;
+  }
+  trackEvent(r,'upi_payment_details_submitted','90-Day Career Stability Plan','Rs. 499','Client submitted UPI payment details',{
+    transactionId:txn,
+    paymentStatus:'Payment details submitted',
+    upiId:CFG.upiId||''
+  });
+  var body='Name: '+(p.name||'')+'\nEmail: '+(p.email||'')+'\nRole: '+(p.roleSubLabel||p.roleLabel||p.role||'')+'\nIndustry: '+(p.industry||'')+'\nScore: '+(r.total||'')+'/125\nRisk: '+((r.riskCat&&r.riskCat.lbl)||'')+'\nPattern: '+((r.pattern&&r.pattern.name)||'')+'\nReport ID: '+(r.submissionId||'')+'\nAmount: Rs. 499\nUPI ID used: '+(CFG.upiId||'')+'\nUPI transaction/reference ID: '+txn+'\n\nI have paid Rs. 499 for the CareerShield 90-Day Career Stability Plan. Payment screenshot is attached. Please generate/confirm my report.';
+  setTimeout(function(){window.location.href=mailtoUrl('CareerShield UPI Payment Submitted - '+(p.name||'Client')+' ('+(r.submissionId||'')+')',body);},120);
+  alert('Payment details recorded. Your email app will open so you can attach the screenshot.');
   return false;
 }
 function requestUpsell(offer,price){
@@ -1622,10 +1709,30 @@ function requestUpsell(offer,price){
   var p=r.profile||{};
   trackEvent(r,'upsell_request_click',offer,price,'Clicked optional deeper support CTA');
   var supportNote='';
-  if(offer==='Career Risk Audit') supportNote='Included support: 2 live online sessions with a seasoned HRBP with two decades of experience, available during my 60-day execution window.';
-  if(offer==='Career Recovery Roadmap') supportNote='Included support: 4 live online sessions with a seasoned HRBP with two decades of experience, available during my 90-day roadmap.';
+  if(offer==='Career Risk Audit') supportNote='Included support: 1 session with seasoned HRBP for practical clarity.';
+  if(offer==='Career Recovery Roadmap') supportNote='Included support: 2 sessions with seasoned HRBP for practical clarity.';
   var body='Name: '+(p.name||'')+'\nEmail: '+(p.email||'')+'\nRole: '+(p.roleSubLabel||p.roleLabel||p.role||'')+'\nIndustry: '+(p.industry||'')+'\nScore: '+(r.total||'')+'/125\nRisk: '+((r.riskCat&&r.riskCat.lbl)||'')+'\nPattern: '+((r.pattern&&r.pattern.name)||'')+'\nOriginal Report ID: '+(r.submissionId||'')+'\nRequested support: '+offer+' - '+price+(supportNote?'\n'+supportNote:'')+'\n\nI want to discuss this deeper support option. Please use my existing CareerShield report as context.';
   window.location.href=mailtoUrl('CareerShield Upsell Request - '+offer+' - '+(p.name||'Client')+' ('+(r.submissionId||'')+')',body);
+  return false;
+}
+function showPolicy(kind){
+  var panel=document.getElementById('policy-panel');
+  if(!panel) return false;
+  var email=CFG.email||'support@careershield.in';
+  var name=CFG.registeredName||CFG.businessName||'CareerShield';
+  var loc=CFG.registeredLocation||'India';
+  var map={
+    about:['About CareerShield','CareerShield is an online education and assessment tool for mid-career professionals. It helps users understand job-risk signals, role exposure, and practical 90-day stability actions. It is not a job placement service, employment guarantee, legal advice, financial advice, or psychological counselling.'],
+    delivery:['Delivery Policy','The free preview is shown immediately after assessment submission. The paid CareerShield report is generated after payment confirmation and sent to the email address provided by the user. During manual UPI payment periods, users must share the transaction/reference ID and screenshot so payment can be verified.'],
+    refund:['Refund & Cancellation Policy','Because CareerShield is a digital assessment and report product, cancellations are accepted only before paid report generation starts. If a duplicate payment or failed service delivery is verified, refund requests can be emailed to '+email+' within 7 days with the report ID and payment proof. Refunds, where approved, are processed to the original payment method or UPI account.'],
+    privacy:['Privacy Policy','CareerShield collects name, email, role, industry, experience range, age band, assessment answers, stated career fear, optional interest, payment intent, and report metadata. This information is used to generate the diagnostic, maintain records, respond to support requests, and improve the tool. Data is not sold. Users can email '+email+' for correction or deletion requests, subject to operational and legal record needs.'],
+    terms:['Terms of Use','CareerShield reports are based on self-reported answers and general role-market patterns. They are educational and reflective in nature. Users should not treat the report as an instruction to resign, invest, confront an employer, or make a major career/financial/legal decision. By using the tool, users agree that outcomes depend on personal context and external market conditions.'],
+    contact:['Contact & Business Details','Business/contact name: '+name+'. Location: '+loc+'. Primary email: '+email+'. Secondary email: '+(CFG.backupEmail||'')+'. Escalation email: '+(CFG.thirdEmail||'')+'. Payment gateway reviewers may classify this product as Online Education / E-learning / Digital Assessment Tool.']
+  };
+  var item=map[kind]||map.about;
+  panel.innerHTML='<h3>'+esc(item[0])+'</h3><p>'+esc(item[1])+'</p>';
+  panel.classList.add('on');
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
   return false;
 }
 
@@ -1700,6 +1807,12 @@ function buildPreview(r){
     ctaEl.href='#unlock-report';
     ctaEl.onclick=function(){return requestPaidReport(r);};
   }
+  var bridge=document.getElementById('payment-bridge');
+  if(bridge) bridge.classList.remove('on');
+  var txnEl=document.getElementById('upi-txn');
+  if(txnEl) txnEl.value='';
+  var upiEl=document.getElementById('upi-id-display');
+  if(upiEl) upiEl.textContent=CFG.upiId||'Update in config';
 }
 
 // ============================================================
